@@ -1,4 +1,4 @@
-module github.com/mattermost/go-i18n
+module github.com/flywave/go-i18n
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect

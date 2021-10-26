@@ -362,3 +362,29 @@ func BenchmarkTranslatePluralWithStructPointer(b *testing.B) {
 		tf(data)
 	}
 }
+
+func TestTranslateCountPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Fatal("should've not panic")
+		}
+	}()
+
+	bundle := New()
+	translationID := "translation_id"
+	translation, err := translation.NewTranslation(map[string]interface{}{
+		"id": translationID,
+		"translation": map[string]interface{}{
+			"one":   "{{.Person}} is {{.Count}} year old.",
+			"other": "{{.Person}} is {{.Count}} years old.",
+		},
+	})
+
+	bundle.AddTranslation(languageWithTag("en"), translation)
+	tf, err := bundle.Tfunc("en")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_ = tf(translationID)
+}
